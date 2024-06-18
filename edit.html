@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Image</title>
+    <link rel="stylesheet" href="design.css">
+    <style>
+        body {
+            background-color: #010050; /* Set the background color you want */
+            font-family: Arial, sans-serif; /* Optional: Set font family */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-main">
+        <div id="main1">
+            <form>
+                <h2> Shape Features </h2>
+                <label for="text-label">Label Text</label>
+                <input id="text-label" name="text-label" type="text" placeholder="Enter here">
+                <label for="text-color"> Text Color </label>
+                <input id="text-color" name="text-color" type="text" placeholder="Enter here">
+                <label for="color">Shape Color</label>
+                <input id="color" name="color" type="text" placeholder="Enter here">
+                <label for="text-label">Line Width</label>
+                <input id="width" name="width" type="text" placeholder="Enter here">
+                <label for="shadow">Shadow Color</label>
+                <input id="shadow" name="shadow" type="text" placeholder="Enter here">
+            </form>
+        </div> 
+        <div id="main2">
+            <canvas id="edit-container"> </canvas>
+            <div id="edit-buttons">
+                <button id="go-back-btn"> Return </button>
+                <button id="save-annotations" onclick="saveAnnotations()"> Save Annotations </button>
+                <button id="clear" onclick="clearDrawing()"> Clear </button>
+            </div>
+        </div>
+        <div id="main3">
+            <form>
+                <h2> Choose Shape </h2>
+                <label for="w">Shape</label>
+                <input id="w" name="w" type="text" placeholder="Enter here">
+                <label for="shadow-blur">Shadow Blur</label>
+                <input id="shadow-blur" name="shadow-blur" type="text" placeholder="Enter here">
+                <label for="W">Shape</label>
+                <input id="w" name="w" type="text" placeholder="Enter here">
+            </form>
+        </div> 
+    </div>
+
+    <script src="draw.js"></script>
+    <script>   
+        // Handle return button click
+        document.getElementById('go-back-btn').addEventListener('click', function(event) {
+            const returnParam = encodeURIComponent(JSON.stringify(images));
+            window.location.href = `interface.html?images=${returnParam}`;
+        });
+    </script>
+
+</body>
+</html>
