@@ -9,10 +9,13 @@ let shape_drawn = false;
 let text_label = 'Sample Text';
 let text_color = 'black';
 let shape_color = 'red';
-let shape_width = '2';
+let shape_width = 2;    
 let shape_shadow = '';
-let shadow_blur = '20';
+let shadow_blur = 20;
 let shape_type = 'rectangle';
+let points = [];
+let lines = [];
+let fill = false;
 
 document.getElementById('text-label').addEventListener('input', function() {
     text_label = this.value;
@@ -38,24 +41,13 @@ document.getElementById('shadow-blur').addEventListener('input', function() {
     shadow_blur = this.value;
 });
 
-// document.getElementById('rectangle-btn').addEventListener('click', function() {
-//     shape_type = 'rectangle';
-// });
-
-// document.getElementById('circle-btn').addEventListener('click', function() {
-//     shape_type = 'circle';
-// });
-
-// document.getElementById('connect-btn').addEventListener('click', function() {
-//     shape_type = 'connect';
-// });
-
-// document.getElementById('line-btn').addEventListener('click', function() {
-//     shape_type = 'line';
-// });
-
-document.getElementById('w').addEventListener('input', function() {
-    shape_type = this.value;
+document.getElementById('shape-form').addEventListener('change', function(event) {
+    shape_type = document.querySelector('input[name="shape"]:checked').value;
+    console.log('Selected shape:', shape_type);
+});
+document.getElementById('fill').addEventListener('change', function(event) {
+    console.log("Checked"); 
+    fill = event.target.checked;
 });
 
 // Parse the JSON string back into an array
@@ -97,6 +89,12 @@ function startDrawing(event){
     const pos = getMousePos(event);
     stx = pos.x;
     sty = pos.y;
+
+    if (shape_type === 'connected') {
+        points.push({ x: stx, y: sty });
+    }
+    drawPoints();
+
 }
 
 function stopDrawing(event){
@@ -111,15 +109,15 @@ function stopDrawing(event){
             endx,
             endy,
             color: shape_color,
-            density: shape_width,
-            shadow: shape_shadow,
-            text: text_label
+            line_width: shape_width,
+            shadow_color: shape_shadow,
+            shadow_blur: shadow_blur,
+            text: text_label,
+            text_color: text_color
         };
         annotation_text = currentAnnotation.text;
         drawing = false;
         shape_drawn = true;
-        console.log("Annotations")
-        console.log(annotations)
     }
 }
 
@@ -133,9 +131,9 @@ function draw(event) {
     ctx.strokeStyle = shape_color;
     ctx.lineWidth = shape_width;
     ctx.font = '16px Arial'; 
-    ctx.fillStyle = 'red';
-    ctx.shadowColor = shadow;
-    ctx.shadowBlur = shadow_blur;
+    ctx.fillStyle = text_color;
+    ctx.shadowColor = shape_shadow;
+    ctx.shadowBlur = parseFloat(shadow_blur);
     if (shape_type === 'rectangle') {
         ctx.strokeRect(stx, sty, endx - stx, endy - sty);
         ctx.fillText(text_label, stx, sty - 5);
@@ -151,9 +149,44 @@ function draw(event) {
         ctx.arc(stx, sty, radius, 0, 2 * Math.PI);
         ctx.stroke();
 
+        if (fill) {
+            ctx.fillStyle = shape_color;
+            ctx.fill();
+        }
+
         // Draw the text on the circle's border
         ctx.fillText(text_label, textX, textY);
     }
+    else if (shape_type === 'connected') {
+        points.push({ x: endx, y: endy });
+        ctx.beginPath();
+        for (let i = 0; i < points.length - 1; i++) {
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[i + 1].x, points[i + 1].y);
+        }
+        ctx.stroke();
+        points.pop(); // Remove the last point to avoid duplication
+        drawPoints();
+        ctx.fillText(text_label, points[0].x - 20, points[0].y - 10);
+    }
+    else if(shape_type === 'line') {
+        drawLine(stx, sty, endx, endy);
+        ctx.fillText(text_label, endx, endy);
+    }
+    if(fill === 'true')
+    {
+        ctx.fillStyle = "green";
+        ctx.fill();
+    }
+}
+
+function drawPoints(){
+    points.forEach(point => {
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, 5, 0, 2 * Math.PI); // Adjust the radius (5) as needed
+        ctx.fillStyle = 'blue'; // Adjust the color as needed
+        ctx.fill();
+    });
 }
 
 function clearDrawing(){
@@ -167,6 +200,8 @@ function clearDrawing(){
         annotations.splice(last_idx, 1)
         console.log("Annotations after clear")
         console.log(annotations);
+        points = [];
+        lines = [];
     }
 }
 
@@ -178,4 +213,23 @@ function saveAnnotations() {
         console.log(annotations);
     }
 }
+
+function downloadImage(data, filename = 'untitled.jpeg') {
+    var a = document.createElement('a');
+    a.href = data;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+
+function drawLine(x1, y1, x2, y2) {
+    lines.push({x1: x1, y1: y1, x2: x2, y2:y2});
+    ctx.beginPath(); // Start a new path
+    ctx.moveTo(x1, y1); // Move to the starting point (x1, y1)
+    ctx.lineTo(x2, y2); // Draw a line to the ending point (x2, y2)
+    ctx.stroke(); // Draw the line
+}
+
 
