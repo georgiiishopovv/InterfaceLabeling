@@ -34,6 +34,8 @@
                 <input id="width" name="width" type="text" placeholder="Enter here">
                 <label for="shadow">Shadow Color</label>
                 <input id="shadow" name="shadow" type="text" placeholder="Enter here">
+                <label for="shadow-blur">Shadow Blur</label>
+                <input id="shadow-blur" name="shadow-blur" type="text" placeholder="Enter here">
             </form>
         </div> 
         <div id="main2">
@@ -45,15 +47,29 @@
             </div>
         </div>
         <div id="main3">
-            <form>
+            <form id="shape-form">
                 <h2> Choose Shape </h2>
-                <label for="w">Shape</label>
-                <input id="w" name="w" type="text" placeholder="Enter here">
-                <label for="shadow-blur">Shadow Blur</label>
-                <input id="shadow-blur" name="shadow-blur" type="text" placeholder="Enter here">
-                <label for="W">Shape</label>
-                <input id="w" name="w" type="text" placeholder="Enter here">
+                <div>
+                    <input type="radio" id="rectangle" name="shape" value="rectangle"/>
+                    <label for="rectangle">Rectangle</label>
+                </div>
+                <div>
+                    <input type="radio" id="circle" name="shape" value="circle"/>
+                    <label for="circle">Circle</label>
+                </div>
+                <div>
+                    <input type="radio" id="connected" name="shape" value="connected"/>
+                    <label for="connected">Connect Points</label>
+                </div>
+                <div>
+                    <input type="radio" id="line" name="shape" value="line"/>
+                    <label for="line">Straight Line</label>
+                </div>
             </form>
+            <div>
+                <input type="radio" id="fill" name="fill" value="fill"/>
+                <label for="fill">Fill Shape</label>
+            </div>
         </div> 
     </div>
 
