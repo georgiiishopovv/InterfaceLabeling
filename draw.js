@@ -1,21 +1,24 @@
 let annotations = []
 const urlParams = new URLSearchParams(window.location.search);
 const imagesParam = urlParams.get('images');
-const index = parseInt(urlParams.get('index'));
+let index = parseInt(urlParams.get('index'));
 const canvas = document.getElementById('edit-container');
 const ctx = canvas.getContext('2d');
 let shape_drawn = false;
+let currentAnnotation = '';
+let saved = false;
+let xmlAnnotation = '';
 
 let text_label = 'Sample Text';
 let text_color = 'black';
 let shape_color = 'red';
+let text_size = 16;
 let shape_width = 2;    
-let shape_shadow = '';
-let shadow_blur = 20;
 let shape_type = 'rectangle';
 let points = [];
 let lines = [];
 let fill = false;
+let save_name = '';
 
 document.getElementById('text-label').addEventListener('input', function() {
     text_label = this.value;
@@ -54,18 +57,27 @@ document.getElementById('fill').addEventListener('change', function(event) {
 const images = JSON.parse(decodeURIComponent(imagesParam));
 console.log(images);
 
+upper_switch = document.getElementById('switch-image-text');
+index += 1;
+upper_switch.innerText = `${index} / ${images.length}`;
+
+let editedImage = new Image();
 // Display the image in larger format
-const editedImage = new Image();
-editedImage.src = images[index];
+function canvasImage(index){
+    editedImage = new Image();
+    editedImage.src = images[index-1];
 
-editedImage.onload = function() {
-    // Set canvas dimensions
-    canvas.width = editedImage.width;
-    canvas.height = editedImage.height;
+    editedImage.onload = function() {
+        // Set canvas dimensions
+        canvas.width = editedImage.width;
+        canvas.height = editedImage.height;
 
-    // Draw the image on the canvas
-    ctx.drawImage(editedImage, 0, 0, canvas.width, canvas.height);
-};
+        // Draw the image on the canvas
+        ctx.drawImage(editedImage, 0, 0, canvas.width, canvas.height);
+    };
+}
+
+canvasImage(index);
 
 canvas.addEventListener('mousedown', startDrawing);
 canvas.addEventListener('mouseup', stopDrawing);
@@ -104,20 +116,18 @@ function stopDrawing(event){
         const endy = pos.y;
         currentAnnotation = {
             type: shape_type,
-            stx,
-            sty,
-            endx,
-            endy,
+            starting_x: stx,
+            starting_y: sty,
+            end_x: endx,
+            end_y: endy,
             color: shape_color,
             line_width: shape_width,
-            shadow_color: shape_shadow,
-            shadow_blur: shadow_blur,
             text: text_label,
-            text_color: text_color
+            text_color: text_color,
+            image_src: images[index]
         };
         annotation_text = currentAnnotation.text;
         drawing = false;
-        shape_drawn = true;
     }
 }
 
@@ -130,10 +140,9 @@ function draw(event) {
     ctx.drawImage(editedImage, 0, 0);
     ctx.strokeStyle = shape_color;
     ctx.lineWidth = shape_width;
-    ctx.font = '16px Arial'; 
+    text_size = `${text_size} Arial`;
+    ctx.font = text_size; 
     ctx.fillStyle = text_color;
-    ctx.shadowColor = shape_shadow;
-    ctx.shadowBlur = parseFloat(shadow_blur);
     if (shape_type === 'rectangle') {
         ctx.strokeRect(stx, sty, endx - stx, endy - sty);
         ctx.fillText(text_label, stx, sty - 5);
@@ -178,6 +187,8 @@ function draw(event) {
         ctx.fillStyle = "green";
         ctx.fill();
     }
+    saved = false;
+    shape_drawn = true;
 }
 
 function drawPoints(){
@@ -190,7 +201,7 @@ function drawPoints(){
 }
 
 function clearDrawing(){
-    if(shape_drawn){
+    if(shape_drawn && saved){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(editedImage, 0, 0);
         shape_drawn = false;
@@ -205,22 +216,57 @@ function clearDrawing(){
     }
 }
 
+function convertToXML(obj, indent = '   ') {
+    let xml = `<annotation>\n`;
+    const childIndent = indent; // Increase indentation for child elements
+    for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            xml += `${childIndent}<${key}> ${obj[key]} </${key}>\n`;
+        }
+    }
+    xml += `</annotation>`;
+    return xml;
+}
+
 function saveAnnotations() {
-    if (currentAnnotation) {
-        annotations.push(currentAnnotation);
+    if (currentAnnotation != '') {
+        alert('Annotations saved successfully.');
+        xmlAnnotation = convertToXML(currentAnnotation);
+        console.log(xmlAnnotation);
         currentAnnotation = null;
-        console.log("Annotations after save")
+        annotations.push(xmlAnnotation);
+        console.log("Annotations after save");
+        console.log("Hello");
         console.log(annotations);
+        saved = true;
+
+        save_name = `labeled_image${index}`;
+        console.log("Saved name", save_name);
+        saveImageWithMetadata();
     }
 }
 
-function downloadImage(data, filename = 'untitled.jpeg') {
-    var a = document.createElement('a');
+function downloadImage(data, file) {
+    const a = document.createElement('a');
     a.href = data;
-    a.download = filename;
+    a.download = file;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    console.log("Downloaded");
+}
+
+function saveImageWithMetadata(){
+    const dataURL = canvas.toDataURL('image/jpeg');
+    const exifObj = piexif.load(dataURL);
+
+    exifObj['0th'][piexif.ImageIFD.UserComment] = piexif.sanitizeUserComment(xmlAnnotation);
+
+    const exifBytes = piexif.dump(exifObj);
+    const newDataURL = piexif.insert(exifBytes, dataURL);
+
+    console.log("Preparing download", xmlAnnotation);
+    downloadImage(newDataURL, save_name);
 }
 
 
@@ -231,5 +277,30 @@ function drawLine(x1, y1, x2, y2) {
     ctx.lineTo(x2, y2); // Draw a line to the ending point (x2, y2)
     ctx.stroke(); // Draw the line
 }
+
+document.querySelector('.arrow-left-edit').addEventListener('click', function() {
+    if (images.length > 0) {
+        if(index > 1){
+            console.log("Current index", index);
+            index -= 1;
+            upper_switch.innerText = `${index} / ${images.length}`;
+            canvasImage(index);
+            //currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+        }
+    }
+});
+
+document.querySelector('.arrow-right-edit').addEventListener('click', function() {
+    if (images.length > 0) {
+        if(index < images.length){
+            console.log("Current index", index);
+            index += 1;
+            upper_switch.innerText = `${index} / ${images.length}`;
+            canvasImage(index);
+            //currentImageIndex = (currentImageIndex + 1) % images.length;
+        }
+    }
+});  
+
 
 
