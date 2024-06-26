@@ -157,7 +157,7 @@ input[type="file"] {
 
 #main1 h2{
     position: relative;
-    bottom: 2.5rem;
+    bottom: 1rem;
     border: 2px solid white;
     border-radius: 0.5rem;
     margin-left: 1rem;
@@ -175,13 +175,14 @@ input[type="file"] {
     margin-bottom: 1rem;
     margin-right: 3rem;
     margin-left: 3rem;
+    padding: 0.4rem;
 }
 
 #main3 {
     grid-column: 3;
     display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items horizontally */
+    flex-direction: column; 
+    align-items: center; 
     justify-content: center;
     margin-right: 3.5rem;
     color: white;
@@ -193,37 +194,55 @@ input[type="file"] {
     margin-top: 8rem;
     margin-bottom: 8rem;
     width: 16rem;
+    margin-left: 4rem;
 }
 
 #main3 h2{
     position: relative;
-    bottom: 7rem;
+    bottom: 6.6rem;
     border: 2px solid white;
     border-radius: 0.5rem;
     margin-left: 1rem;
     margin-right: 1rem;
     text-align: center;
+    padding: 0.2rem;
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
 }
 
-#main3 button{
-    margin-top: 0.4rem;
-    margin-bottom: 0.4rem;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: 0.6px solid white;
-    border-radius: 0.4rem;
-    transition: background-color 0.4s;
-    font-size: 1.2rem;
-    z-index: 1;
-    width: 14.7rem; 
-    height: 2.4rem;
-    margin-left: 0.6rem;
+#main3 form {
+    display: flex;
+    flex-direction: column;
+}
+
+#main3 form div {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff; /* Background color for the boxes */
+}
+
+#main3 form div label {
+    color: black;
+}
+
+#main3 form div input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.6);
+    background-color: #45a049;
+}
+
+#main3 form div label {
+    margin-top: 0.2rem;
 }
 
 #edit-container{
-    width: 50rem;
-    height: 40rem;
+    width: 47rem;
+    height: 35rem;
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
@@ -231,6 +250,7 @@ input[type="file"] {
     align-items: center; /* Optional: Set container background color */
     border: 2px solid white;
     overflow: hidden;
+    margin-left: 0.8rem;
 }
 
 #edit-container img{
@@ -242,7 +262,8 @@ input[type="file"] {
 #edit-buttons{
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 2.4rem;
+    margin-left: 1rem;
 }
 
 #edit-buttons button{
@@ -256,6 +277,48 @@ input[type="file"] {
     transition: background-color 0.4s;
     font-size: 1rem;
     z-index: 1;
-    width: 14.7rem;
-    height: 2.4rem;
+    width: 14rem;
+    height: 2.6rem;
+}
+
+#switch-image{
+    background-color: rgba(255, 255, 255, 0.6);
+    height: 3rem;
+    width: 17rem;
+    position: relative;
+    left: 16rem;
+    top: 1rem;
+    border-radius: 0.6rem;
+}
+
+.arrow-edit {
+    position: absolute;
+    top: 0.5rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 0.4rem;
+}
+
+.arrow-left-edit {
+    left: 1.6rem;
+    z-index: 1;
+    height: 2rem;
+    width: 2rem;
+}
+
+.arrow-right-edit {
+    right: 1.6rem;
+    z-index: 1;
+    height: 2rem;
+    width: 2rem;
+}
+
+#switch-image-text{
+    position: relative;
+    top: 0.9rem;
+    left: 7.1rem; 
 }
