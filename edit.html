@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Image</title>
     <link rel="stylesheet" href="design.css">
+    
     <style>
         body {
             background-color: #010050; /* Set the background color you want */
@@ -28,6 +29,8 @@
                 <input id="text-label" name="text-label" type="text" placeholder="Enter here">
                 <label for="text-color"> Text Color </label>
                 <input id="text-color" name="text-color" type="text" placeholder="Enter here">
+                <label for="text-size"> Text Size </label>
+                <input id="text-size" name="text-size" type="text" placeholder="Enter here">
                 <label for="color">Shape Color</label>
                 <input id="color" name="color" type="text" placeholder="Enter here">
                 <label for="text-label">Line Width</label>
@@ -39,11 +42,16 @@
             </form>
         </div> 
         <div id="main2">
+            <div id="switch-image">
+                <button class="arrow-edit arrow-left-edit">&#9664;</button>
+                <h3 id="switch-image-text"> Calculating </h3>
+                <button class="arrow-edit arrow-right-edit">&#9654;</button>
+            </div>
             <canvas id="edit-container"> </canvas>
             <div id="edit-buttons">
                 <button id="go-back-btn"> Return </button>
                 <button id="save-annotations" onclick="saveAnnotations()"> Save Annotations </button>
-                <button id="clear" onclick="clearDrawing()"> Clear </button>
+                <button id="clear-annotation" onclick="clearDrawing()"> Clear Last Annotation </button>
             </div>
         </div>
         <div id="main3">
@@ -73,6 +81,7 @@
         </div> 
     </div>
 
+    <!-- <script src="https://cdn.jsdelivr.net/npm/piexifjs"></script> -->
     <script src="draw.js"></script>
     <script>   
         // Handle return button click
