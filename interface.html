@@ -31,6 +31,7 @@
         let currentImageIndex = 0;
         let images = [];
         let globalImages = [];
+        image_count = 0;
 
         const urlParams = new URLSearchParams(window.location.search);
         const returningParam = urlParams.get('images');
@@ -58,6 +59,7 @@
                 globalImages[i] = file.name;
                 console.log("Global Images", globalImages[i])
                 const reader = new FileReader();
+                image_count = globalImages.length;
                 reader.onload = function(e) {
                     images.push(e.target.result);
                     if (images.length === 1) {
@@ -111,6 +113,7 @@
                 displayImage(currentImageIndex);
             }
         });        
+
     </script>
 
 </body>
