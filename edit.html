@@ -35,10 +35,6 @@
                 <input id="color" name="color" type="text" placeholder="Enter here">
                 <label for="text-label">Line Width</label>
                 <input id="width" name="width" type="text" placeholder="Enter here">
-                <label for="shadow">Shadow Color</label>
-                <input id="shadow" name="shadow" type="text" placeholder="Enter here">
-                <label for="shadow-blur">Shadow Blur</label>
-                <input id="shadow-blur" name="shadow-blur" type="text" placeholder="Enter here">
             </form>
         </div> 
         <div id="main2">
@@ -47,11 +43,14 @@
                 <h3 id="switch-image-text"> Calculating </h3>
                 <button class="arrow-edit arrow-right-edit">&#9654;</button>
             </div>
-            <canvas id="edit-container"> </canvas>
-            <div id="edit-buttons">
-                <button id="go-back-btn"> Return </button>
-                <button id="save-annotations" onclick="saveAnnotations()"> Save Annotations </button>
-                <button id="clear-annotation" onclick="clearDrawing()"> Clear Last Annotation </button>
+            <div id="main-edit">
+                <canvas id="edit-container"> </canvas>
+                <div id="edit-buttons">
+                    <button id="go-back-btn"> Return </button>
+                    <button id="save-annotations" onclick="saveAnnotations()"> Save Annotations </button>
+                    <button id="clear-annotation" onclick="clearDrawing()"> Clear Last Annotation </button>
+                    <button id="clear-all" onclick="clearAll()"> Clear All Annotations </button>
+                </div>
             </div>
         </div>
         <div id="main3">
@@ -73,15 +72,16 @@
                     <input type="radio" id="line" name="shape" value="line"/>
                     <label for="line">Straight Line</label>
                 </div>
+                <div id="fill">
+                    <input type="radio" id="fill" name="fill" value="fill"/>
+                    <label for="fill">Fill Shape</label>
+                </div>
             </form>
-            <div>
-                <input type="radio" id="fill" name="fill" value="fill"/>
-                <label for="fill">Fill Shape</label>
-            </div>
         </div> 
     </div>
+    <img id="local-image" src="" alt="">
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/piexifjs"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/piexifjs"></script>
     <script src="draw.js"></script>
     <script>   
         // Handle return button click
