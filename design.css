@@ -128,12 +128,25 @@ input[type="file"] {
 
 #main-main{
     display: grid;
-    grid-template-columns: 0.6fr 3fr 0.6fr; 
-    gap: 4px;
+    grid-template-columns: 23% 53% 22%; 
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
 }
 
 #main2 {
     grid-column: 2; /* Place main2 in the middle column */
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; */
+    /* flex-wrap: wrap; */
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 4%;
 }
 
 #main1 {
@@ -142,17 +155,18 @@ input[type="file"] {
     flex-direction: column; /* Stack items vertically */
     align-items: center; /* Center items horizontally */
     justify-content: center;
-    margin-right: 3.5rem;
+    /* margin-right: 3.5rem; */
     color: white;
     font-size: 1rem;
     font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 1rem;
     border: 1px solid #4CAF50;
     border-radius: 0.5rem;
-    margin-top: 8rem;
-    margin-bottom: 8rem;
+    /* margin-top: 8rem;
+    margin-bottom: 8rem; */
     margin-left: 2.6rem;
     text-align: center;
+    flex-wrap: wrap;
 }
 
 #main1 h2{
@@ -162,6 +176,7 @@ input[type="file"] {
     border-radius: 0.5rem;
     margin-left: 1rem;
     margin-right: 1rem;
+    text-align: center;
 }
 
 #main1 label{
@@ -173,8 +188,8 @@ input[type="file"] {
 
 #main1 input{
     margin-bottom: 1rem;
-    margin-right: 3rem;
-    margin-left: 3rem;
+    /* margin-right: 3rem;
+    margin-left: 3rem; */
     padding: 0.4rem;
 }
 
@@ -191,15 +206,16 @@ input[type="file"] {
     margin-bottom: 1rem;
     border: 1px solid #4CAF50;
     border-radius: 0.5rem;
-    margin-top: 8rem;
-    margin-bottom: 8rem;
-    width: 16rem;
-    margin-left: 4rem;
+    /* margin-top: 8rem;
+    margin-bottom: 8rem; */
+    /* width: 16rem; */
+    /* margin-left: 4rem; */
+    flex-wrap: wrap;
 }
 
 #main3 h2{
     position: relative;
-    bottom: 6.6rem;
+    bottom: 1rem;
     border: 2px solid white;
     border-radius: 0.5rem;
     margin-left: 1rem;
@@ -213,6 +229,8 @@ input[type="file"] {
 #main3 form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #main3 form div {
@@ -221,7 +239,7 @@ input[type="file"] {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
-    width: 100%;
+    width: 80%;
     box-sizing: border-box;
     background-color: #fff; /* Background color for the boxes */
 }
@@ -240,9 +258,16 @@ input[type="file"] {
     margin-top: 0.2rem;
 }
 
+#main-edit{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
 #edit-container{
-    width: 47rem;
-    height: 35rem;
+    width: 100%;
+    height: 60%;
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
@@ -261,9 +286,12 @@ input[type="file"] {
 
 #edit-buttons{
     display: flex;
+    gap: 2%;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 2.4rem;
-    margin-left: 1rem;
+    margin-left: 1.8rem;
+    margin-right: 1rem;
 }
 
 #edit-buttons button{
@@ -272,28 +300,34 @@ input[type="file"] {
     cursor: pointer;
     background-color: #4CAF50;
     color: white;
-    border: none;
     border-radius: 0.4rem;
     transition: background-color 0.4s;
     font-size: 1rem;
     z-index: 1;
-    width: 14rem;
-    height: 2.6rem;
+    flex: 1 1 15rem;
+    height: 2.8rem;
+    width: 30rem;
+    word-wrap: break-word;
 }
 
 #switch-image{
     background-color: rgba(255, 255, 255, 0.6);
-    height: 3rem;
-    width: 17rem;
+    height: 2.6rem;
+    width: 15rem;
     position: relative;
-    left: 16rem;
-    top: 1rem;
     border-radius: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -0.4%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
 }
 
 .arrow-edit {
-    position: absolute;
-    top: 0.5rem;
+    position: absolute; 
     font-size: 1rem;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
@@ -301,24 +335,91 @@ input[type="file"] {
     cursor: pointer;
     padding: 0.4rem;
     border-radius: 0.4rem;
+    height: 70%;
+    width: 16%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .arrow-left-edit {
     left: 1.6rem;
-    z-index: 1;
-    height: 2rem;
-    width: 2rem;
+    z-index: 1; 
 }
 
 .arrow-right-edit {
     right: 1.6rem;
-    z-index: 1;
-    height: 2rem;
-    width: 2rem;
+    z-index: 1; 
 }
 
 #switch-image-text{
-    position: relative;
-    top: 0.9rem;
-    left: 7.1rem; 
+    font-size: 1.4rem;
+}
+
+@media screen and (max-width: 1200px) {
+    #main-main {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 1rem;
+    }
+
+    #main1 {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+    }
+
+    #main3 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        float: right;
+    }
+
+    #main2 {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        margin-top: 4%;
+    }
+
+    #switch-image{
+        height: 4%;
+        width: 20%;
+    }
+
+    #arrow-edit{
+        height: 26%;
+        width: 8%;
+    }
+
+    #switch-image-text{
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (max-width: 771px) {
+    #main-main {
+        grid-template-columns: 0.6fr 0.6fr;
+        grid-template-rows: auto auto;
+        gap: 1rem;
+    }
+
+    #main1 {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+    }
+
+    #main3 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        float: right;
+    }
+
+    #main2 {
+        grid-column: 1 / span 2;
+        grid-row: 2;
+        margin: 0;
+    }
 }
