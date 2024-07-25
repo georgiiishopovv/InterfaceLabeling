@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Import Button</title>
+    <link rel="stylesheet" href="design.css">
+</head>
+<body>
+
+    <div class="main">
+        <h2> Image Processing </h2>
+        <div id="image-box">
+            <button class="arrow arrow-left">&#9664;</button>
+            <div id="image-display"></div>
+            <button class="arrow arrow-right">&#9654;</button>
+            <div class="buttons">
+                <button id="editButton">Edit</button>
+                <button id="deleteButton">Delete</button>
+            </div>
+        </div>
+        <form>
+            <label for="fileInput" class="custom-file-upload">
+                Choose File
+            </label>
+            <input type="file" id="fileInput" name="fileInput" multiple>
+        </form>
+    </div>
+
+    <script>
+        let currentImageIndex = 0;
+        let images = [];
+        let globalImages = [];
+        image_count = 0;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const returningParam = urlParams.get('images');
+        console.log("Returning parameters", returningParam)
+        if (returningParam) {
+            //Parse the JSON string back into an array
+            images = JSON.parse(decodeURIComponent(returningParam));
+
+            //Display the first image if there are images
+            if (images) {
+                imageBox = document.getElementById('image-box')
+                imageBox.style.display = 'block'
+                displayImage(0);
+            }
+        }
+
+        globalImages = images;
+
+        //Add event listener to the file input
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const fileList = event.target.files;
+            images = [];
+            currentImageIndex = 0;
+            for (let i = 0; i < fileList.length; i++) {
+                const file = fileList[i];
+                globalImages[i] = file.name;
+                console.log("Global Images", globalImages[i])
+                const reader = new FileReader();
+                image_count = globalImages.length;
+                reader.onload = function(e) {
+                    images.push(e.target.result);
+                    if (images.length === 1) {
+                        displayImage(0);
+                    }
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        //Display the images and maintain their index order
+        function displayImage(index) {
+            const imageContainer = document.getElementById('image-display');
+            imageContainer.innerHTML = '';
+            imageBox = document.getElementById('image-box')
+            imageBox.style.display = 'block'
+            console.log("New", images)
+            const img = document.createElement('img');
+            img.src = images[index];
+            console.log("Source", img.src)
+            imageContainer.appendChild(img);
+
+            const editButton = document.getElementById('editButton');
+            editButton.onclick = function() {
+                const imagesParam = encodeURIComponent(JSON.stringify(globalImages));
+                window.location.href = `edit.html?images=${imagesParam}&index=${encodeURIComponent(currentImageIndex)}`;
+            };
+
+            const deleteButton = document.getElementById('deleteButton');
+            deleteButton.onclick = function() {
+                images.splice(currentImageIndex, 1);
+                if (images.length > 0) {
+                    currentImageIndex = currentImageIndex % images.length;
+                    displayImage(currentImageIndex);
+                } else {
+                    imageContainer.innerHTML = '';
+                }
+            };
+        }
+
+        //Move between the images
+        document.querySelector('.arrow-left').addEventListener('click', function() {
+            if (images.length > 0) {
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                displayImage(currentImageIndex);
+            }
+        });
+
+        document.querySelector('.arrow-right').addEventListener('click', function() {
+            if (images.length > 0) {
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                displayImage(currentImageIndex);
+            }
+        });        
+
+    </script>
+
+</body>
+</html>
