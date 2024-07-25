@@ -37,10 +37,10 @@
         const returningParam = urlParams.get('images');
         console.log("Returning parameters", returningParam)
         if (returningParam) {
-            // Parse the JSON string back into an array
+            //Parse the JSON string back into an array
             images = JSON.parse(decodeURIComponent(returningParam));
 
-            // Display the first image if there are images
+            //Display the first image if there are images
             if (images) {
                 imageBox = document.getElementById('image-box')
                 imageBox.style.display = 'block'
@@ -50,6 +50,7 @@
 
         globalImages = images;
 
+        //Add event listener to the file input
         document.getElementById('fileInput').addEventListener('change', function(event) {
             const fileList = event.target.files;
             images = [];
@@ -71,6 +72,7 @@
             }
         });
 
+        //Display the images and maintain their index order
         function displayImage(index) {
             const imageContainer = document.getElementById('image-display');
             imageContainer.innerHTML = '';
@@ -100,6 +102,7 @@
             };
         }
 
+        //Move between the images
         document.querySelector('.arrow-left').addEventListener('click', function() {
             if (images.length > 0) {
                 currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;

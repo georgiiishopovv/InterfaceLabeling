@@ -48,8 +48,9 @@
                 <div id="edit-buttons">
                     <button id="go-back-btn"> Return </button>
                     <button id="save-annotations" onclick="saveAnnotations()"> Save Annotations </button>
-                    <button id="clear-annotation" onclick="clearDrawing()"> Clear Last Annotation </button>
+                    <button id="clear-annotation" onclick="clearLast()"> Clear Last Annotation </button>
                     <button id="clear-all" onclick="clearAll()"> Clear All Annotations </button>
+                    <button id="save-canvas" onclick="saveCanvasImage()"> Save Canvas Image </button>
                 </div>
             </div>
         </div>
@@ -79,16 +80,11 @@
             </form>
         </div> 
     </div>
-    <img id="local-image" src="" alt="">
 
     <script src="https://cdn.jsdelivr.net/npm/piexifjs"></script>
     <script src="draw.js"></script>
     <script>   
-        // Handle return button click
-        document.getElementById('go-back-btn').addEventListener('click', function(event) {
-            const returnParam = encodeURIComponent(JSON.stringify(images));
-            window.location.href = `interface.html?images=${returnParam}`;
-        });
+        
     </script>
 
 </body>
