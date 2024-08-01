@@ -10,7 +10,10 @@ from PIL import Image
 from keras._tf_keras.keras.preprocessing.image import img_to_array, load_img
 import cv2
 
+#Sample program used for performing a convolution neural network training
+
 def main():
+    #Sample images used as input data
     image_paths = [
     "C:/Users/Georgi/Desktop/InternshipSpain2024/car1.jpg",
     "C:/Users/Georgi/Desktop/InternshipSpain2024/car2.jpg",
@@ -34,12 +37,14 @@ def main():
     "C:/Users/Georgi/Desktop/InternshipSpain2024/bike5.jpg",
     "C:/Users/Georgi/Desktop/InternshipSpain2024/bike6.jpg"
     ]
+    
+    #Image size
     target_size = (28, 28)
 
-    #print(f"Second image pixel values range: {images_np[1].min()} - {images_np[1].max()}")
-
+    # Respective labels
     labels = ['car', 'car', 'car', 'car', 'car', 'car', 'car', 'car', 'plane', 'plane','plane', 'plane', 'plane', 'plane', 'plane', 'bike', 'bike', 'bike', 'bike', 'bike', 'bike']
 
+    #Augment each sample image into num_augmenterd_images more to increase the input sample space
     def augment_images(image_paths, labels, num_augmented_images, target_size):
 
         datagen = ImageDataGenerator(
@@ -71,37 +76,23 @@ def main():
         return augmented_images, augmented_labels
             
     a_images, a_labels = augment_images(image_paths, labels, 10, target_size)
-    #a_images = [load_and_preprocess_image(path, target_size) for path in a_images]
+    
+    #Choose if you prefer to use grayscale or color images
     grayscale = False
     for i in range(len(a_images)):
         a_images[i] = cv2.resize(a_images[i], target_size)
         a_images[i] = np.array(a_images[i]) / 255.0
         if grayscale:
-            pil_image1 = Image.fromarray((a_images[i] * 255).astype(np.uint8))  # Convert NumPy array to PIL Image
-            pil_image1 = pil_image1.convert('L')  # Convert to grayscale
-            a_images[i] = np.array(pil_image1) / 255.0  # Convert back to NumPy array and normalize
+            pil_image1 = Image.fromarray((a_images[i] * 255).astype(np.uint8))  #Convert NumPy array to PIL Image
+            pil_image1 = pil_image1.convert('L')  #Convert to grayscale
+            a_images[i] = np.array(pil_image1) / 255.0  #Convert back to NumPy array and normalize
             
-    #images = [load_and_preprocess_image(path, target_size) for path in image_paths]
-    #images_np = np.array(images)
     a_images_np = np.array(a_images)
-    print("Shape of the new array:", a_images_np.shape)
-    #combined_array = np.concatenate((images_np, a_images_np), axis=0)
 
     label_map = {'car': 0, 'plane': 1, 'bike': 2}
-    # labels_np = np.array([label_map[label] for label in labels])
-    # labels_np = labeling(labels_np)
     a_labels_np = np.array([label_map[label] for label in a_labels])
     a_labels_np = labeling(a_labels_np)
-    # labels_np = np.array(labels_np)
     a_labels_np = np.array(a_labels_np)
-    #combined_labels = np.concatenate((labels_np, a_labels_np), axis=0)
-    #combined_array = np.array(combined_array)
-    #combined_labels = np.array(combined_labels)
-
-    # print("====================")
-    # print(combined_array)
-    # print("====================")
-    # print(combined_labels)
 
     indices = np.arange(len(a_images_np))
     np.random.shuffle(indices)
@@ -115,6 +106,7 @@ def main():
 
     train(a_images_np, a_labels_np, conv, pool, full)
     
+    #Test images
     image_paths = [
         "C:/Users/Georgi/Desktop/InternshipSpain2024/test_car1.jpg",
         "C:/Users/Georgi/Desktop/InternshipSpain2024/test_car2.jpg",
@@ -124,21 +116,21 @@ def main():
 
     test_images = [load_and_preprocess_image(path, target_size) for path in image_paths]
     if grayscale:
-            pil_image1 = Image.fromarray((test_images[i] * 255).astype(np.uint8))  # Convert NumPy array to PIL Image
-            pil_image1 = pil_image1.convert('L')  # Convert to grayscale
-            test_images[i] = np.array(pil_image1) / 255.0  # Convert back to NumPy array and normalize
+            pil_image1 = Image.fromarray((test_images[i] * 255).astype(np.uint8))  #Convert NumPy array to PIL Image
+            pil_image1 = pil_image1.convert('L')  #Convert to grayscale
+            test_images[i] = np.array(pil_image1) / 255.0  #Convert back to NumPy array and normalize
     test_images_np = np.array(test_images)
 
-    # Split data into train and test sets
+    #Split data into train and test sets
     predictions = []
     for data in test_images_np:
-        pred = predict(data, conv, pool, full)  # Assuming you have a predict function
+        pred = predict(data, conv, pool, full) 
         predictions.append(pred)
 
     predicted_labels = []
     for pred in predictions:
         max_index = np.argmax(pred)
-        label = list(label_map.keys())[max_index]  # Map index back to original label
+        label = list(label_map.keys())[max_index]  #Map index back to original label
         predicted_labels.append(label)
 
     for i, label in enumerate(predicted_labels):
@@ -146,29 +138,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#=======================
-# print("My: ", images_np[0])
-# print("My label: ", labels_np[0])
-
-# (train_images, train_labels), (test_images, test_labels) = keras.datasets.fashion_mnist.load_data()
-
-# X_train = train_images[:500] / 255.0
-# y_train = train_labels[:500]
-
-# X_test = train_images[500:1000] / 255.0
-# y_test = train_labels[500:1000]
-
-# y_train = to_categorical(y_train)
-# print("Mnist: ", X_train[1])
-# print("Mnist label", y_train[1])
-#print(X_train.shape)
-
-# y_test = to_categorical(y_test)
-# #print("Initial labels", y_train)
-
-# conv = Conv(X_train[0].shape, 6, 1)
-# pool = MaxPool(2)
-# full = CNN(121, 10)
-
-# train(X_train, y_train, conv, pool, full)
